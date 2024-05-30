@@ -35,7 +35,7 @@ export function AuthProvider(props) {
             user: null,
           };
         default:
-          return prevState; // Asegúrate de manejar el estado por defecto
+          return prevState;
       }
     },
     {
@@ -82,7 +82,6 @@ export function AuthProvider(props) {
         }
       },
       signOut: async () => {
-        //Aquí en realidad no hay mayor lógica más resetear las variables
         //await AsyncStorage.removeItem("user");
         dispatch({ type: "SIGN_OUT" });
       },

@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useAuth } from "../AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home({ navigation }) {
   const { signOut } = useAuth();
+  const [apodo, setApodo] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await AsyncStorage.getItem("user");
+        if (userData) {
+          const { apodo } = JSON.parse(userData);
+          setApodo(apodo);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleLogout = () => {
     signOut();
@@ -12,6 +30,7 @@ export default function Home({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.saludo}>Hola, {apodo}</Text>
       <View style={styles.content}>
         <Text style={styles.title}>Bienvenido a la App de Eventos</Text>
         <View style={styles.buttonRow}>
@@ -52,18 +71,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#e0e0e0",
     justifyContent: "center",
-    alignItems: "center" 
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#6200ea",
     textAlign: "center",
-    marginBottom: 20, 
-    fontFamily: "Glacial" 
+    marginBottom: 20,
+    fontFamily: "Glacial",
   },
   content: {
-    alignItems: "center", 
+    alignItems: "center",
   },
   buttonRow: {
     flexDirection: "row",
@@ -77,7 +96,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   buttonContent: {
+    width: 140,
+    height: 140,
     alignItems: "center",
+    justifyContent: "center",
     borderWidth: 2,
     borderColor: "#6200ea",
     borderRadius: 10,

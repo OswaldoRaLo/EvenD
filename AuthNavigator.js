@@ -11,7 +11,7 @@ import ConfirmAttendance from "./screens/ConfirmAttendance";
 
 import { useAuth } from './AuthContext';
 
-const Stack = createNativeStackNavigator(); // Movido fuera del componente de función
+const Stack = createNativeStackNavigator(); 
 
 export default function AuthNavigator() {
   const { loading, signout, user } = useAuth();
