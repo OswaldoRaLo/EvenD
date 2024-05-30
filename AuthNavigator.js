@@ -6,14 +6,14 @@ import Home from "./screens/Home";
 import Loading from "./screens/Loading";
 import CreateEvent from "./screens/CreateEvent";
 import ViewEvents from "./screens/ViewEvents";
-import EventDetails from "./screens/EventDetails"; // Importar la nueva pantalla
+import EventDetails from "./screens/EventDetails";
 import ConfirmAttendance from "./screens/ConfirmAttendance";
 
 import { useAuth } from './AuthContext';
 
-export default function AuthNavigator() {
-  const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator(); // Movido fuera del componente de función
 
+export default function AuthNavigator() {
   const { loading, signout, user } = useAuth();
 
   if (loading) {

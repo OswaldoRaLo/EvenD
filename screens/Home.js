@@ -7,7 +7,7 @@ export default function Home({ navigation }) {
 
   const handleLogout = () => {
     signOut();
-    navigation.navigate("Login"); // Navegar a la pantalla de inicio de sesión al cerrar sesión
+    navigation.navigate("Login"); 
   };
 
   return (
@@ -51,19 +51,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#e0e0e0",
-    justifyContent: "center", // Centrar contenido verticalmente
-    alignItems: "center" // Centrar contenido horizontalmente
+    justifyContent: "center",
+    alignItems: "center" 
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#6200ea",
     textAlign: "center",
-    marginBottom: 20, // Añadir espacio entre el título y el contenido
-    fontFamily: "Glacial" // Asegúrate de que esta fuente esté disponible
+    marginBottom: 20, 
+    fontFamily: "Glacial" 
   },
   content: {
-    alignItems: "center", // Centrar contenido horizontalmente dentro de content
+    alignItems: "center", 
   },
   buttonRow: {
     flexDirection: "row",

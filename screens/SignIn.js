@@ -123,4 +123,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 25,
   },
+  button: {
+    backgroundColor: "skyblue", 
+  },
 });

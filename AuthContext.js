@@ -34,6 +34,8 @@ export function AuthProvider(props) {
             signout: true,
             user: null,
           };
+        default:
+          return prevState; // Asegúrate de manejar el estado por defecto
       }
     },
     {
@@ -42,7 +44,7 @@ export function AuthProvider(props) {
       user: null,
     }
   );
-
+  
   useEffect(() => {
     const check_session = async () => {
       let user;
