@@ -70,8 +70,11 @@ CREATE TABLE album (
     FOREIGN KEY (idevento) REFERENCES eventos(id)
 );
 
+<<<<<<< HEAD
 
 -- Modificacion
 
 ALTER TABLE invitacion
 ADD COLUMN acepta CHAR(1);
+=======
+>>>>>>> ecc1024345f7d3c4600ffe787a648c0a4f26d24a
