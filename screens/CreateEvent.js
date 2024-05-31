@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Button, Alert, Text, TouchableOpacity, FlatList, Image, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, TextInput, Button, Alert, Text, TouchableOpacity, FlatList, Image, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
@@ -39,21 +39,32 @@ const TipoSelector = ({ onSelect }) => {
       <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
         <Text style={styles.dropdownButtonText}>{selectedTipo ? selectedTipo.nombre : "Selecciona un tipo"}</Text>
       </TouchableOpacity>
-      {showDropdown && (
-        <FlatList
-          data={tipos}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.tipoItem}
-              onPress={() => handleSelectTipo(item)}
-            >
-              <Text style={styles.tipoText}>{item.nombre}</Text>
+      <Modal
+        visible={showDropdown}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowDropdown(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <FlatList
+              data={tipos}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.tipoItem}
+                  onPress={() => handleSelectTipo(item)}
+                >
+                  <Text style={styles.tipoText}>{item.nombre}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            <TouchableOpacity onPress={() => setShowDropdown(false)} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>Cerrar</Text>
             </TouchableOpacity>
-          )}
-          ListFooterComponent={<View style={{ height: 10 }} />} // Espacio al final para evitar que el último elemento se corte
-        />
-      )}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -119,51 +130,65 @@ export default function CreateEvent({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre del Evento"
-          value={nombreEvento}
-          onChangeText={setNombreEvento}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Descripción"
-          value={descripcion}
-          onChangeText={setDescripcion}
-        />
-        <TipoSelector onSelect={setIdTipo} />
-        <TextInput
-          style={styles.input}
-          placeholder="Día"
-          value={dia}
-          onChangeText={setDia}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Mes"
-          value={mes}
-          onChangeText={setMes}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Año"
-          value={ano}
-          onChangeText={setAno}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Localización"
-          value={localizacion}
-          onChangeText={setLocalizacion}
-        />
-        <Button title="Elegir Imagen" onPress={handlePickImage} />
-        {image && <Image source={{ uri: image }} style={styles.imagePreview} />}
-        <Button title="Crear Evento" onPress={handleCreateEvent} />
-      </KeyboardAvoidingView>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.keyboardAvoidingView}>
+          <TextInput
+            style={styles.input}
+            placeholder="Nombre del Evento"
+            value={nombreEvento}
+            onChangeText={setNombreEvento}
+            placeholderTextColor="#888"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Descripción"
+            value={descripcion}
+            onChangeText={setDescripcion}
+            placeholderTextColor="#888"
+          />
+          <TipoSelector onSelect={setIdTipo} />
+          <View style={styles.dateContainer}>
+            <TextInput
+              style={styles.dateInput}
+              placeholder="Día"
+              value={dia}
+              onChangeText={setDia}
+              keyboardType="numeric"
+              placeholderTextColor="#888"
+            />
+            <TextInput
+              style={styles.dateInput}
+              placeholder="Mes"
+              value={mes}
+              onChangeText={setMes}
+              keyboardType="numeric"
+              placeholderTextColor="#888"
+            />
+            <TextInput
+              style={styles.dateInput}
+              placeholder="Año"
+              value={ano}
+              onChangeText={setAno}
+              keyboardType="numeric"
+              placeholderTextColor="#888"
+            />
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Localización"
+            value={localizacion}
+            onChangeText={setLocalizacion}
+            placeholderTextColor="#888"
+          />
+          <TouchableOpacity style={styles.button} onPress={handlePickImage}>
+            <Text style={styles.buttonText}>Elegir Imagen</Text>
+          </TouchableOpacity>
+          {image && <Image source={{ uri: image }} style={styles.imagePreview} />}
+          <TouchableOpacity style={styles.button} onPress={handleCreateEvent}>
+            <Text style={styles.buttonText}>Crear Evento</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -171,42 +196,125 @@ export default function CreateEvent({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#f0f0f5",
     padding: 20,
-    backgroundColor: "#ffffff",
+  },
+  scrollContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  keyboardAvoidingView: {
+    width: "100%",
+    alignItems: "center",
   },
   input: {
-    height: 40,
+    width: "90%",
+    height: 60,
+    marginVertical: 10,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "#fff",
     borderColor: "#ccc",
     borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 15,
+    fontSize: 18,
+    color: "#333",
+    alignSelf: "center",
+  },
+  dateContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "90%",
+    alignSelf: "center",
+  },
+  dateInput: {
+    width: "30%",
+    height: 60,
+    marginVertical: 10,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "#fff",
+    borderColor: "#ccc",
+    borderWidth: 1,
+    fontSize: 18,
+    color: "#333",
   },
   dropdownButton: {
-    padding: 10,
-    borderWidth: 1,
+    width: "90%",
+    height: 60,
+    marginVertical: 10,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "#fff",
     borderColor: "#ccc",
-    borderRadius: 5,
-    marginBottom: 15,
+    borderWidth: 1,
+    justifyContent: "center",
+    alignSelf: "center",
   },
   dropdownButtonText: {
-    fontSize: 16,
+    fontSize: 18,
+    color: "#333",
+  },
+  dropdownContainer: {
+    maxHeight: 200,
+    width: "90%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    marginTop: 10,
+    alignSelf: "center",
   },
   tipoItem: {
-    padding: 10,
+    padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
   },
   tipoText: {
-    fontSize: 16,
+    fontSize: 18,
+    color: "#333",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: "90%",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20,
+    maxHeight: "80%",
+  },
+  closeButton: {
+    marginTop: 10,
+    backgroundColor: "#FAA64D",
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    fontSize: 18,
+    color: "white",
   },
   imagePreview: {
     width: 200,
     height: 200,
     marginVertical: 10,
+    borderRadius: 10,
   },
-  tipoSelectorContainer: {
-    zIndex: 1,
-    marginBottom: 15,
+  button: {
+    width: "60%",
+    height: 50,
+    backgroundColor: "#FAA64D",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
+    alignSelf: "center",
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "white",
   },
 });

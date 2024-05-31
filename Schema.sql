@@ -69,3 +69,4 @@ CREATE TABLE album (
     idevento INT,
     FOREIGN KEY (idevento) REFERENCES eventos(id)
 );
+
