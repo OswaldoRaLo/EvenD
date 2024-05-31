@@ -91,17 +91,19 @@ const styles = StyleSheet.create({
   },
   saludo: {
     fontSize: 24,
-    fontWeight: "bold",
     color: "#6200ea",
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: "Glacial",  // Cambiado a "Glacial"
+
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
     color: "#6200ea",
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: "Glacial",  // Cambiado a "Glacial"
+
   },
   content: {
     alignItems: "center",
