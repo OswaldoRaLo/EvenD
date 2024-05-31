@@ -225,9 +225,10 @@ def create_itinerario():
     hora = data['hora']
     concepto = data['concepto']
     peticion = data.get('peticion')
+    acepta = data.get('acepta')
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO itinerario (idevento, hora, concepto, peticion) VALUES (%s, %s, %s, %s)', (idevento, hora, concepto, peticion))
+    cursor.execute('INSERT INTO itinerario (idevento, hora, concepto, peticion, acepta) VALUES (%s, %s, %s, %s)', (idevento, hora, concepto, peticion, acepta))
     conn.commit()
     cursor.close()
     conn.close()
@@ -361,6 +362,35 @@ def delete_album(id):
     cursor.close()
     conn.close()
     return jsonify({'message': 'Álbum eliminado con éxito'})
+
+# Obtiene el ultimo evento ##################################################################################3
+
+@app.route('/eventos/last', methods=['GET'])
+def get_last_event():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('SELECT id FROM eventos ORDER BY id DESC LIMIT 1')
+    last_event = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return jsonify(last_event)
+
+# Obtine la lista de amigos ##############################################################################
+@app.route('/listaamigos/<int:idusuario>', methods=['GET'])
+def get_listaamigos_by_user(idusuario):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('''
+        SELECT usuarios.id, usuarios.apodo
+        FROM listaamigos
+        JOIN usuarios ON listaamigos.idamigo = usuarios.id
+        WHERE listaamigos.idusuario = %s
+    ''', (idusuario,))
+    amigos = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(amigos)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
