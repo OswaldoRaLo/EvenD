@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from "react-native";
-import { useAuth } from "../AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "../AuthContext";
 
 export default function Home({ navigation }) {
   const { signOut } = useAuth();
@@ -23,9 +23,17 @@ export default function Home({ navigation }) {
     fetchUserData();
   }, []);
 
-  const handleLogout = () => {
-    signOut();
-    navigation.navigate("Login"); 
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("user");
+      signOut();
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      });
+    } catch (error) {
+      console.error("Error removing user data: ", error);
+    }
   };
 
   return (
@@ -94,16 +102,14 @@ const styles = StyleSheet.create({
     color: "#6200ea",
     textAlign: "center",
     marginBottom: 20,
-    fontFamily: "Glacial",  // Cambiado a "Glacial"
-
+    fontFamily: "Glacial",
   },
   title: {
     fontSize: 24,
     color: "#6200ea",
     textAlign: "center",
     marginBottom: 20,
-    fontFamily: "Glacial",  // Cambiado a "Glacial"
-
+    fontFamily: "Glacial",
   },
   content: {
     alignItems: "center",
