@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from "react-native";
 import { useAuth } from "../AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -29,49 +29,72 @@ export default function Home({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.saludo}>Hola, {apodo}</Text>
-      <View style={styles.content}>
-        <Text style={styles.title}>Bienvenido a la App de Eventos</Text>
-        <View style={styles.buttonRow}>
-          <TouchableOpacity onPress={() => navigation.navigate("CreateEvent")} style={styles.button}>
-            <View style={styles.buttonContent}>
-              <Image source={require('../assets/anadir-evento.png')} style={styles.buttonImage} />
-              <Text style={styles.buttonText}>Crear Evento</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("ViewEvents")} style={styles.button}>
-            <View style={styles.buttonContent}>
-              <Image source={require('../assets/ver.png')} style={styles.buttonImage} />
-              <Text style={styles.buttonText}>Ver Eventos</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonRow}>
-          <TouchableOpacity onPress={() => navigation.navigate("ConfirmAttendance")} style={styles.button}>
-            <View style={styles.buttonContent}>
-              <Image source={require('../assets/ausencia.png')} style={styles.buttonImage} />
-              <Text style={styles.buttonText}>Confirmar Asistencia</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleLogout} style={styles.button}>
-            <View style={styles.buttonContent}>
-              <Image source={require('../assets/cerrar-sesion.png')} style={styles.buttonImage} />
-              <Text style={styles.buttonText}>Cerrar Sesión</Text>
-            </View>
-          </TouchableOpacity>
+    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <View style={styles.container}>
+        <Text style={styles.saludo}>Hola, {apodo}</Text>
+        <View style={styles.content}>
+          <Text style={styles.title}>Bienvenido a la App de Eventos</Text>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity onPress={() => navigation.navigate("CreateEvent")} style={styles.button}>
+              <View style={styles.buttonContent}>
+                <Image source={require('../assets/anadir-evento.png')} style={styles.buttonImage} />
+                <Text style={styles.buttonText}>Crear Evento</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("ViewEvents")} style={styles.button}>
+              <View style={styles.buttonContent}>
+                <Image source={require('../assets/ver.png')} style={styles.buttonImage} />
+                <Text style={styles.buttonText}>Ver Eventos</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity onPress={() => navigation.navigate("ConfirmAttendance")} style={styles.button}>
+              <View style={styles.buttonContent}>
+                <Image source={require('../assets/ausencia.png')} style={styles.buttonImage} />
+                <Text style={styles.buttonText}>Confirmar Asistencia</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("Amigos")} style={styles.button}>
+              <View style={styles.buttonContent}>
+                <Image source={require('../assets/amigos.png')} style={styles.buttonImage} />
+                <Text style={styles.buttonText}>Amigos</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity onPress={handleLogout} style={styles.button}>
+              <View style={styles.buttonContent}>
+                <Image source={require('../assets/cerrar-sesion.png')} style={styles.buttonImage} />
+                <Text style={styles.buttonText}>Cerrar Sesión</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   container: {
     flex: 1,
     backgroundColor: "#e0e0e0",
     justifyContent: "center",
     alignItems: "center",
+    padding: 20,
+  },
+  saludo: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#6200ea",
+    textAlign: "center",
+    marginBottom: 20,
   },
   title: {
     fontSize: 24,
@@ -79,14 +102,13 @@ const styles = StyleSheet.create({
     color: "#6200ea",
     textAlign: "center",
     marginBottom: 20,
-    fontFamily: "Glacial",
   },
   content: {
     alignItems: "center",
   },
   buttonRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginVertical: 15,
     paddingHorizontal: 20,
   },
@@ -96,8 +118,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   buttonContent: {
-    width: 140,
-    height: 140,
+    width: 120,
+    height: 120,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 2,
@@ -112,13 +134,13 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonImage: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
     resizeMode: 'contain',
   },
   buttonText: {
     marginTop: 10,
-    fontSize: 16,
+    fontSize: 14,
     textAlign: "center",
     color: "#6200ea",
     fontWeight: "600",

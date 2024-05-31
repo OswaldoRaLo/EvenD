@@ -8,6 +8,7 @@ import CreateEvent from "./screens/CreateEvent";
 import ViewEvents from "./screens/ViewEvents";
 import EventDetails from "./screens/EventDetails";
 import ConfirmAttendance from "./screens/ConfirmAttendance";
+import Amigos from "./screens/Amigos";  // <--- Añadir esta línea
 
 import { useAuth } from './AuthContext';
 
@@ -60,6 +61,13 @@ export default function AuthNavigator() {
                 title: "Confirmar Asistencia",
               }}
             />
+            <Stack.Screen
+              name="Amigos"  // <--- Añadir esta línea
+              component={Amigos}  // <--- Añadir esta línea
+              options={{  // <--- Añadir esta línea
+                title: "Amigos",  // <--- Añadir esta línea
+              }}  // <--- Añadir esta línea
+            />  
           </>
         ) : (
           <>
