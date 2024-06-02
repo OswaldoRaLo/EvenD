@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, TextInput, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, FlatList, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -54,6 +54,23 @@ export default function InviteFriends({ navigation }) {
   };
 
   const handleSaveInvitations = async () => {
+    const errors = [];
+
+    for (const friendId of Object.keys(selectedFriends)) {
+      if (selectedFriends[friendId]) {
+        const { dia, mes, ano } = selectedFriends[friendId];
+        if (!dia || !mes || !ano) {
+          const friend = friends.find(f => f.id === parseInt(friendId));
+          errors.push(`Por favor, completa la fecha límite para ${friend.apodo}`);
+        }
+      }
+    }
+
+    if (errors.length > 0) {
+      Alert.alert('Error', errors.join('\n'));
+      return;
+    }
+
     try {
       const invitations = Object.keys(selectedFriends)
         .filter((id) => selectedFriends[id])
@@ -81,6 +98,7 @@ export default function InviteFriends({ navigation }) {
       <FlatList
         data={friends}
         keyExtractor={(item) => item.id.toString()}
+        ListHeaderComponent={<Text style={styles.title}>Invitar Amigos</Text>}
         renderItem={({ item }) => (
           <View style={styles.friendItem}>
             <Checkbox
@@ -98,21 +116,21 @@ export default function InviteFriends({ navigation }) {
                 />
                 <View style={styles.dateInputs}>
                   <TextInput
-                    style={styles.input}
+                    style={styles.dateInput}
                     placeholder="Día"
                     value={selectedFriends[item.id].dia}
                     onChangeText={(text) => handleInputChange(item.id, 'dia', text)}
                     keyboardType="numeric"
                   />
                   <TextInput
-                    style={styles.input}
+                    style={styles.dateInput}
                     placeholder="Mes"
                     value={selectedFriends[item.id].mes}
                     onChangeText={(text) => handleInputChange(item.id, 'mes', text)}
                     keyboardType="numeric"
                   />
                   <TextInput
-                    style={styles.input}
+                    style={styles.dateInput}
                     placeholder="Año"
                     value={selectedFriends[item.id].ano}
                     onChangeText={(text) => handleInputChange(item.id, 'ano', text)}
@@ -124,8 +142,12 @@ export default function InviteFriends({ navigation }) {
             )}
           </View>
         )}
+        ListFooterComponent={
+          <TouchableOpacity style={styles.button} onPress={handleSaveInvitations}>
+            <Text style={styles.buttonText}>Guardar</Text>
+          </TouchableOpacity>
+        }
       />
-      <Button title="Guardar" onPress={handleSaveInvitations} />
     </View>
   );
 }
@@ -133,17 +155,24 @@ export default function InviteFriends({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: "#ffffff",
+    padding: 40,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    alignSelf: 'center',
+    fontFamily: 'Glacial'
   },
   friendItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 20,
   },
   friendName: {
     marginLeft: 10,
     fontSize: 16,
+    fontFamily: 'Glacial'
   },
   additionalInputs: {
     flex: 1,
@@ -152,6 +181,7 @@ const styles = StyleSheet.create({
   dateInputs: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 10,
   },
   input: {
     height: 40,
@@ -161,11 +191,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 10,
     flex: 1,
+    fontFamily: 'Glacial'
+  },
+  dateInput: {
+    width: "30%",
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    fontFamily:'Glacial'
   },
   dateHint: {
     fontSize: 12,
     color: '#666',
-    marginTop: -10,
-    marginBottom: 10,
+    fontFamily: 'Glacial'
+  },
+  button: {
+    width: "60%",
+    height: 50,
+    backgroundColor: "#FAA64D",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
+    alignSelf: "center",
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "white",
+    fontFamily: 'Glacial'
   },
 });

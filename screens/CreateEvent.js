@@ -37,7 +37,7 @@ const TipoSelector = ({ onSelect }) => {
   return (
     <View style={styles.tipoSelectorContainer}>
       <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
-        <Text style={styles.dropdownButtonText}>{selectedTipo ? selectedTipo.nombre : "Selecciona un tipo"}</Text>
+        <Text style={styles.dropdownButtonText}>{selectedTipo ? selectedTipo.nombre : "Selecciona un tipo *"}</Text>
       </TouchableOpacity>
       <Modal
         visible={showDropdown}
@@ -72,7 +72,7 @@ const TipoSelector = ({ onSelect }) => {
 export default function CreateEvent({ navigation }) {
   const [nombreEvento, setNombreEvento] = useState('');
   const [descripcion, setDescripcion] = useState('');
-  const [idtipo, setIdTipo] = useState('');
+  const [idtipo, setIdTipo] = useState(null);
   const [dia, setDia] = useState('');
   const [mes, setMes] = useState('');
   const [ano, setAno] = useState('');
@@ -97,6 +97,11 @@ export default function CreateEvent({ navigation }) {
   };
 
   const handleCreateEvent = async () => {
+    if (!nombreEvento || !idtipo || !dia || !mes || !ano) {
+      Alert.alert('Campos obligatorios', 'Por favor completa todos los campos obligatorios.');
+      return;
+    }
+
     try {
       const userData = await AsyncStorage.getItem('user');
       const { id: idusuario } = JSON.parse(userData);
@@ -134,7 +139,7 @@ export default function CreateEvent({ navigation }) {
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.keyboardAvoidingView}>
           <TextInput
             style={styles.input}
-            placeholder="Nombre del Evento"
+            placeholder="Nombre del Evento *"
             value={nombreEvento}
             onChangeText={setNombreEvento}
             placeholderTextColor="#888"
@@ -150,7 +155,7 @@ export default function CreateEvent({ navigation }) {
           <View style={styles.dateContainer}>
             <TextInput
               style={styles.dateInput}
-              placeholder="Día"
+              placeholder="Día *"
               value={dia}
               onChangeText={setDia}
               keyboardType="numeric"
@@ -158,7 +163,7 @@ export default function CreateEvent({ navigation }) {
             />
             <TextInput
               style={styles.dateInput}
-              placeholder="Mes"
+              placeholder="Mes *"
               value={mes}
               onChangeText={setMes}
               keyboardType="numeric"
@@ -166,7 +171,7 @@ export default function CreateEvent({ navigation }) {
             />
             <TextInput
               style={styles.dateInput}
-              placeholder="Año"
+              placeholder="Año *"
               value={ano}
               onChangeText={setAno}
               keyboardType="numeric"
@@ -219,6 +224,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#333",
     alignSelf: "center",
+    fontFamily: 'Glacial'
   },
   dateContainer: {
     flexDirection: "row",
@@ -237,6 +243,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 18,
     color: "#333",
+    fontFamily: 'Glacial'
   },
   dropdownButton: {
     width: "90%",
@@ -252,7 +259,8 @@ const styles = StyleSheet.create({
   },
   dropdownButtonText: {
     fontSize: 18,
-    color: "#333",
+    color: "#888",
+    fontFamily: 'Glacial'
   },
   dropdownContainer: {
     maxHeight: 200,
@@ -316,5 +324,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: "white",
+    fontFamily: 'Glacial'
   },
 });
