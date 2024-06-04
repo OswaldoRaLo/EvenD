@@ -70,11 +70,18 @@ CREATE TABLE album (
     FOREIGN KEY (idevento) REFERENCES eventos(id)
 );
 
-<<<<<<< HEAD
-
 -- Modificacion
 
 ALTER TABLE invitacion
 ADD COLUMN acepta CHAR(1);
-=======
->>>>>>> ecc1024345f7d3c4600ffe787a648c0a4f26d24a
+
+-- Añadir valores a tipo
+
+INSERT INTO `eventos_db`.`tipo` (`id`, `nombre`) VALUES ('1', 'Virtual');
+INSERT INTO `eventos_db`.`tipo` (`id`, `nombre`) VALUES ('2', 'Fiesta');
+INSERT INTO `eventos_db`.`tipo` (`id`, `nombre`) VALUES ('3', 'Caridad');
+INSERT INTO `eventos_db`.`tipo` (`id`, `nombre`) VALUES ('4', 'Educativo');
+INSERT INTO `eventos_db`.`tipo` (`id`, `nombre`) VALUES ('5', 'Deportivo');
+INSERT INTO `eventos_db`.`tipo` (`id`, `nombre`) VALUES ('6', 'Festival');
+INSERT INTO `eventos_db`.`tipo` (`id`, `nombre`) VALUES ('7', 'Feria');
+INSERT INTO `eventos_db`.`tipo` (`id`, `nombre`) VALUES ('8', 'conferencia');

@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import mysql.connector
+import base64
 
 app = Flask(__name__)
 CORS(app)
@@ -87,10 +88,14 @@ def create_evento():
     idtipo = data['idtipo']
     dia = data['dia']
     localizacion = data.get('localizacion')
-    foto = data.get('foto')
+    foto_base64 = data.get('foto')
+    foto = base64.b64decode(foto_base64.split(',')[1]) if foto_base64 else None
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO eventos (idusuario, nombreEvento, descripcion, idtipo, dia, localizacion, foto) VALUES (%s, %s, %s, %s, %s, %s, %s)', (idusuario, nombreEvento, descripcion, idtipo, dia, localizacion, foto))
+    cursor.execute(
+        'INSERT INTO eventos (idusuario, nombreEvento, descripcion, idtipo, dia, localizacion, foto) VALUES (%s, %s, %s, %s, %s, %s, %s)',
+        (idusuario, nombreEvento, descripcion, idtipo, dia, localizacion, foto)
+    )
     conn.commit()
     cursor.close()
     conn.close()
@@ -293,13 +298,18 @@ def update_invitacion(id):
     peticion = data['peticion']
     idusuario = data['idusuario']
     limiteacept = data['limiteacept']
+    acepta = data.get('acepta')
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('UPDATE invitacion SET idevento = %s, peticion = %s, idusuario = %s, limiteacept = %s WHERE id = %s', (idevento, peticion, idusuario, limiteacept, id))
+    cursor.execute(
+        'UPDATE invitacion SET idevento = %s, peticion = %s, idusuario = %s, limiteacept = %s, acepta = %s WHERE id = %s',
+        (idevento, peticion, idusuario, limiteacept, acepta, id)
+    )
     conn.commit()
     cursor.close()
     conn.close()
     return jsonify({'message': 'Invitación actualizada con éxito'})
+
 
 @app.route('/invitacion/<int:id>', methods=['DELETE'])
 def delete_invitacion(id):
@@ -375,9 +385,52 @@ def get_last_event():
     conn.close()
     return jsonify(last_event)
 
-# Obtine la lista de amigos ##############################################################################
+# Obtiene los datos de una tabla segun su id #############################################################
+@app.route('/usuarios/<int:id>', methods=['GET'])
+def get_usuarios_by_id(id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('SELECT apodo FROM usuarios WHERE id = %s', (id,))
+    usuario = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if usuario:
+        return jsonify(usuario)
+    else:
+        return jsonify({'error': 'Usuario no encontrado'}), 404
+
+@app.route('/tipo/<int:id>', methods=['GET'])
+def get_tipo_by_id(id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('SELECT nombre FROM tipo WHERE id = %s', (id,))
+    tipo = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if tipo:
+        return jsonify(tipo)
+    else:
+        return jsonify({'error': 'Tipo no encontrado'}), 404
+
+@app.route('/eventos/<int:id>', methods=['GET'])
+def get_eventos_by_id(id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('SELECT * FROM eventos WHERE id = %s', (id,))
+    evento = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if evento:
+        if evento['foto']:
+            import base64
+            evento['foto'] = base64.b64encode(evento['foto']).decode('utf-8')
+        return jsonify(evento)
+    else:
+        return jsonify({'error': 'Evento no encontrado'}), 404
+    
 @app.route('/listaamigos/<int:idusuario>', methods=['GET'])
-def get_listaamigos_by_user(idusuario):
+def get_listaamigos_by_id(idusuario):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute('''
@@ -390,7 +443,6 @@ def get_listaamigos_by_user(idusuario):
     cursor.close()
     conn.close()
     return jsonify(amigos)
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
