@@ -30,6 +30,19 @@ def get_usuarios():
     conn.close()
     return jsonify(usuarios)
 
+@app.route('/usuarios/<int:id>', methods=['GET'])
+def get_usuarios_by_id(id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('SELECT apodo FROM usuarios WHERE id = %s', (id,))
+    usuario = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if usuario:
+        return jsonify(usuario)
+    else:
+        return jsonify({'error': 'Usuario no encontrado'}), 404
+    
 @app.route('/usuarios', methods=['POST'])
 def create_usuario():
     data = request.json
@@ -79,6 +92,23 @@ def get_eventos():
     conn.close()
     return jsonify(eventos)
 
+@app.route('/eventos/<int:id>', methods=['GET'])
+def get_eventos_by_id(id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('SELECT * FROM eventos WHERE id = %s', (id,))
+    evento = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if evento:
+        if evento['foto']:
+            import base64
+            evento['foto'] = base64.b64encode(evento['foto']).decode('utf-8')
+        return jsonify(evento)
+    else:
+        return jsonify({'error': 'Evento no encontrado'}), 404
+    
 @app.route('/eventos', methods=['POST'])
 def create_evento():
     data = request.json
@@ -142,6 +172,21 @@ def get_listaamigos():
     conn.close()
     return jsonify(listaamigos)
 
+@app.route('/listaamigos/<int:idusuario>', methods=['GET'])
+def get_listaamigos_by_id(idusuario):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('''
+        SELECT usuarios.id, usuarios.apodo, usuarios.correo
+        FROM listaamigos
+        JOIN usuarios ON listaamigos.idamigo = usuarios.id
+        WHERE listaamigos.idusuario = %s
+    ''', (idusuario,))
+    amigos = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(amigos)
+
 @app.route('/listaamigos', methods=['POST'])
 def create_listaamigo():
     data = request.json
@@ -176,6 +221,19 @@ def get_tipo():
     cursor.close()
     conn.close()
     return jsonify(tipo)
+
+@app.route('/tipo/<int:id>', methods=['GET'])
+def get_tipo_by_id(id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('SELECT nombre FROM tipo WHERE id = %s', (id,))
+    tipo = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if tipo:
+        return jsonify(tipo)
+    else:
+        return jsonify({'error': 'Tipo no encontrado'}), 404
 
 @app.route('/tipo', methods=['POST'])
 def create_tipo():
@@ -385,12 +443,13 @@ def get_last_event():
     conn.close()
     return jsonify(last_event)
 
-# Obtiene los datos de una tabla segun su id #############################################################
-@app.route('/usuarios/<int:id>', methods=['GET'])
-def get_usuarios_by_id(id):
+# Busca un usuario por su correo #############################################################################
+
+@app.route('/usuarios/correo/<correo>', methods=['GET'])
+def get_usuario_by_correo(correo):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT apodo FROM usuarios WHERE id = %s', (id,))
+    cursor.execute('SELECT id, apodo, correo FROM usuarios WHERE correo = %s', (correo,))
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -398,51 +457,6 @@ def get_usuarios_by_id(id):
         return jsonify(usuario)
     else:
         return jsonify({'error': 'Usuario no encontrado'}), 404
-
-@app.route('/tipo/<int:id>', methods=['GET'])
-def get_tipo_by_id(id):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT nombre FROM tipo WHERE id = %s', (id,))
-    tipo = cursor.fetchone()
-    cursor.close()
-    conn.close()
-    if tipo:
-        return jsonify(tipo)
-    else:
-        return jsonify({'error': 'Tipo no encontrado'}), 404
-
-@app.route('/eventos/<int:id>', methods=['GET'])
-def get_eventos_by_id(id):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM eventos WHERE id = %s', (id,))
-    evento = cursor.fetchone()
-    cursor.close()
-    conn.close()
-
-    if evento:
-        if evento['foto']:
-            import base64
-            evento['foto'] = base64.b64encode(evento['foto']).decode('utf-8')
-        return jsonify(evento)
-    else:
-        return jsonify({'error': 'Evento no encontrado'}), 404
-    
-@app.route('/listaamigos/<int:idusuario>', methods=['GET'])
-def get_listaamigos_by_id(idusuario):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('''
-        SELECT usuarios.id, usuarios.apodo
-        FROM listaamigos
-        JOIN usuarios ON listaamigos.idamigo = usuarios.id
-        WHERE listaamigos.idusuario = %s
-    ''', (idusuario,))
-    amigos = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return jsonify(amigos)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
