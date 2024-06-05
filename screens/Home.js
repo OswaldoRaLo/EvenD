@@ -99,14 +99,14 @@ const styles = StyleSheet.create({
   },
   saludo: {
     fontSize: 24,
-    color: "#6200ea",
+    color: "#CB4910",
     textAlign: "center",
     marginBottom: 20,
     fontFamily: "Glacial",
   },
   title: {
     fontSize: 24,
-    color: "#6200ea",
+    color: "#CB4910",
     textAlign: "center",
     marginBottom: 20,
     fontFamily: "Glacial",
@@ -152,5 +152,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#6200ea",
     fontWeight: "600",
+    fontFamily: "Glacial"
   },
 });

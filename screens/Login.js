@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerImage: {
-    width: "100%",
-    height: 365,
+    width: "90%",
+    height: 450,
     resizeMode: "contain",
     position: "absolute",
     top: 0,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     backgroundColor: "#CDCDCD",
-    fontFamily: "Helvetica",
+    fontFamily: "Glacial",
     color: "white",
   },
   button: {
@@ -113,10 +113,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 10,
     marginTop: 20,
+    fontFamily: "Glacial",
   },
   link: {
     color: "#EE8354",
     fontSize: 18,
     marginTop: 30,
+    fontFamily: "Glacial"
   },
 });

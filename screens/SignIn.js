@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     backgroundColor: "#CDCDCD",
-    fontFamily: "Helvetica",
+    fontFamily: "Glacial",
   },
   header: {
     color: "black",
@@ -109,6 +109,8 @@ const styles = StyleSheet.create({
   link: {
     color: "skyblue",
     fontSize: 18,
+    fontFamily: "Glacial",
+    marginTop: 50, // Agregar margen superior para separación
   },
   upper_container: {
     flex: 3,
@@ -125,5 +127,6 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "skyblue", 
+    fontFamily: "Glacial"
   },
 });

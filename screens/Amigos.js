@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from "../Config";
@@ -58,7 +58,9 @@ export default function Amigos() {
         value={search}
         onChangeText={setSearch}
       />
-      <Button title="Añadir Amigo" onPress={handleSearch} />
+      <TouchableOpacity onPress={handleSearch} style={styles.button}>
+        <Text style={styles.buttonText}>Añadir Amigo</Text>
+      </TouchableOpacity>
       <FlatList
         data={friends}
         keyExtractor={(item) => item.id.toString()}
@@ -80,12 +82,28 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   input: {
-    height: 40,
+    height: 60,
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginBottom: 15,
+    marginBottom: 10,
+    fontFamily: "Glacial"
+  },
+  button: {
+    width: "60%",
+    height: 50,
+    backgroundColor: "#FAA64D",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
+    alignSelf: "center",
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontFamily: "Glacial"
   },
   friendItem: {
     padding: 10,
@@ -94,5 +112,6 @@ const styles = StyleSheet.create({
   },
   friendText: {
     fontSize: 16,
+    fontFamily: "Glacial"
   },
 });

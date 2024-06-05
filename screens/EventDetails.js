@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: "Glacial",
     marginBottom: 20,
   },
   userItem: {
@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
   userText: {
     fontSize: 16,
     color: "#333",
+    fontFamily: "Glacial"
   },
   form: {
     marginBottom: 20,
@@ -221,6 +222,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 18,
     color: "#333",
+    fontFamily: "Glacial",
     alignSelf: "center",
   },
   dateContainer: {
@@ -240,6 +242,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 18,
     color: "#333",
+    fontFamily: "Glacial"
   },
   button: {
     width: "60%",
@@ -254,6 +257,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: "white",
+    fontFamily: "Glacial"
   },
   itineraryItem: {
     backgroundColor: "#fff",
@@ -269,5 +273,6 @@ const styles = StyleSheet.create({
   itineraryText: {
     fontSize: 16,
     color: "#333",
+    fontFamily: "Glacial"
   },
 });

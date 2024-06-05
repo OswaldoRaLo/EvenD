@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   eventText: {
     fontSize: 16,
     marginBottom: 10,
+    fontFamily: "Glacial"
   },
   banner: {
     width: '100%',
@@ -217,8 +218,9 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    
     marginBottom: 20,
+    fontFamily: "Glacial"
   },
   buttonContainer: {
     marginVertical: 10,
@@ -233,5 +235,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+    fontFamily: "Glacial"
   }
 });

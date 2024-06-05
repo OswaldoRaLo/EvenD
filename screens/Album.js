@@ -162,6 +162,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 18,
     color: "#333",
+    fontFamily: "Glacial",
+    flexDirection: "row",
+    alignSelf: "center",
   },
   dateContainer: {
     flexDirection: "row",
@@ -180,6 +183,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 18,
     color: "#333",
+    fontFamily: "Glacial"
   },
   button: {
     width: "60%",
@@ -194,6 +198,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: "white",
+    fontFamily: "Glacial"
   },
   imagePreview: {
     width: 200,
@@ -224,5 +229,6 @@ const styles = StyleSheet.create({
   albumText: {
     fontSize: 16,
     marginTop: 10,
+    fontFamily: "Glacial"
   },
 });

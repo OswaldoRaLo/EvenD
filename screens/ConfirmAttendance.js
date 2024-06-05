@@ -159,11 +159,12 @@ const styles = StyleSheet.create({
   eventText: {
     fontSize: 16,
     marginBottom: 10,
+    fontFamily: "Glacial"
   },
   label: {
     fontSize: 14,
-    fontWeight: 'bold',
     marginBottom: 5,
+    fontFamily: "Glacial",
   },
   text: {
     fontSize: 14,

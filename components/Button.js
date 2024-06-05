@@ -16,7 +16,7 @@ export const Button = (props) => {
 const styles = StyleSheet.create({
   button_container: {
     backgroundColor: "white",
-    width: 150,
+    width: 180,
     height: 50,
     borderRadius: 5,
     justifyContent: "center",
@@ -24,5 +24,6 @@ const styles = StyleSheet.create({
   },
   button_text: {
     color: "rgba(255, 255, 255, 255)",
+    fontFamily: "Glacial"
   },
 });
