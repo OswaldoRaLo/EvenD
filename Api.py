@@ -88,6 +88,9 @@ def get_eventos():
     cursor = conn.cursor(dictionary=True)
     cursor.execute('SELECT * FROM eventos')
     eventos = cursor.fetchall()
+    for evento in eventos:
+        if evento['foto']:
+            evento['foto'] = base64.b64encode(evento['foto']).decode('utf-8')
     cursor.close()
     conn.close()
     return jsonify(eventos)
@@ -389,22 +392,29 @@ def get_album():
     album = cursor.fetchall()
     cursor.close()
     conn.close()
+
+    for item in album:
+        if item['foto']:
+            item['foto'] = base64.b64encode(item['foto']).decode('utf-8')
+
     return jsonify(album)
 
 @app.route('/album', methods=['POST'])
 def create_album():
     data = request.json
-    foto = data['foto']
+    foto_base64 = data['foto']
     descripcion = data.get('descripcion')
-    hora = data.get('hora')
+    hora = data['hora']
     idevento = data['idevento']
+    foto = base64.b64decode(foto_base64.split(',')[1]) if foto_base64 else None
+    
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('INSERT INTO album (foto, descripcion, hora, idevento) VALUES (%s, %s, %s, %s)', (foto, descripcion, hora, idevento))
     conn.commit()
     cursor.close()
     conn.close()
-    return jsonify({'message': 'Álbum creado con éxito'}) 
+    return jsonify({'message': 'Álbum creado con éxito'})
 
 @app.route('/album/<int:id>', methods=['PUT'])
 def update_album(id):

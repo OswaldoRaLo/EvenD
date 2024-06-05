@@ -10,6 +10,7 @@ import EventDetails from "./screens/EventDetails";
 import ConfirmAttendance from "./screens/ConfirmAttendance";
 import Amigos from "./screens/Amigos"; 
 import InviteFriends from "./screens/InviteFriends";
+import Album from "./screens/Album";
 
 import { useAuth } from './AuthContext';
 
@@ -75,6 +76,13 @@ export default function AuthNavigator() {
               options={{ 
                 title: "Invitar Amigos",  
               }}  
+            />
+            <Stack.Screen
+              name="Album" 
+              component={Album}
+              options={{
+                title: "Álbum",
+              }}
             /> 
           </>
         ) : (
