@@ -31,10 +31,10 @@ def get_usuarios():
     return jsonify(usuarios)
 
 @app.route('/usuarios/<int:id>', methods=['GET'])
-def get_usuarios_by_id(id):
+def get_usuario_by_id(id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT apodo FROM usuarios WHERE id = %s', (id,))
+    cursor.execute('SELECT apodo, correo FROM usuarios WHERE id = %s', (id,))
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -42,6 +42,7 @@ def get_usuarios_by_id(id):
         return jsonify(usuario)
     else:
         return jsonify({'error': 'Usuario no encontrado'}), 404
+
     
 @app.route('/usuarios', methods=['POST'])
 def create_usuario():
@@ -291,14 +292,14 @@ def create_itinerario():
     hora = data['hora']
     concepto = data['concepto']
     peticion = data.get('peticion')
-    acepta = data.get('acepta')
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO itinerario (idevento, hora, concepto, peticion, acepta) VALUES (%s, %s, %s, %s)', (idevento, hora, concepto, peticion, acepta))
+    cursor.execute('INSERT INTO itinerario (idevento, hora, concepto, peticion) VALUES (%s, %s, %s, %s)', 
+                   (idevento, hora, concepto, peticion))
     conn.commit()
     cursor.close()
     conn.close()
-    return jsonify({'message': 'Itinerario creado con éxito'}) 
+    return jsonify({'message': 'Itinerario creado con éxito'})
 
 @app.route('/itinerario/<int:id>', methods=['PUT'])
 def update_itinerario(id):
